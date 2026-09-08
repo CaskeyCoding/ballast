@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets and env
+.env
+.env.local
+
+# Vector store data
+.chroma/
+chroma/
+*.sqlite3
+
+# Eval run outputs (results are regenerable; history.jsonl is committed)
+eval/results/
+
+# Per-run trace dumps (regenerable)
+runs/
+
+# Eval LLM response cache (regenerable)
+.eval_cache.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Internal planning docs; local only, never ship in the public repo
+proposals/
+
+# Local leak-scan config (read by scripts/leak_scan.py)
+.leak_scan_terms
+
+# Coverage artifacts
+.coverage

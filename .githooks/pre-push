@@ -1,0 +1,57 @@
+#!/bin/sh
+# Pre-push guard (see PUBLISHING.md): only a single-commit orphan `public` snapshot, built from
+# a leak-scan-clean tree and committed with the GitHub noreply identity, may leave this repo,
+# and only as `public` -> `main`. Activate once per clone: git config core.hooksPath .githooks
+set -u
+
+zero=0000000000000000000000000000000000000000
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    # Rule 1: only public -> main.
+    if [ "$local_ref" != "refs/heads/public" ] || [ "$remote_ref" != "refs/heads/main" ]; then
+        echo "refusing: only public:main may be pushed from this repo (see PUBLISHING.md)" >&2
+        exit 1
+    fi
+    if [ "$local_sha" = "$zero" ]; then
+        echo "refusing: only public:main may be pushed from this repo (see PUBLISHING.md)" >&2
+        exit 1
+    fi
+
+    # Rule 2: the public branch is a single orphan snapshot commit.
+    count=$(git rev-list --count "$local_sha")
+    if [ "$count" != "1" ]; then
+        echo "refusing: public must be a single orphan snapshot commit, got $count" >&2
+        exit 1
+    fi
+
+    # Rule 3: the snapshot's tree must pass the leak scan (which fails closed without its
+    # terms file).
+    tmp=$(mktemp -d)
+    git archive "$local_sha" | tar -x -C "$tmp"
+    # Stage the archived tree FIRST, then drop the (gitignored, untracked) terms file
+    # beside it: the tracked-but-ignored tripwire must never see the terms file as tracked.
+    ( cd "$tmp" && git init -q && git add -A -f >/dev/null 2>&1 ) \
+      && cp .leak_scan_terms "$tmp/.leak_scan_terms" 2>/dev/null || true
+    ( cd "$tmp" && python scripts/leak_scan.py )
+    rc=$?
+    rm -rf "$tmp"
+    if [ "$rc" -ne 0 ]; then
+        echo "refusing: leak scan failed on the public snapshot" >&2
+        exit 1
+    fi
+
+    # Rule 4: no personal email in the public commit metadata.
+    author=$(git log -1 --format=%ae "$local_sha")
+    committer=$(git log -1 --format=%ce "$local_sha")
+    for email in "$author" "$committer"; do
+        case "$email" in
+            *@users.noreply.github.com) ;;
+            *)
+                echo "refusing: public snapshot must use the noreply identity" >&2
+                exit 1
+                ;;
+        esac
+    done
+done
+
+exit 0

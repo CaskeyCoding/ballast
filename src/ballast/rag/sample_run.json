@@ -1,0 +1,31 @@
+[
+  {
+    "node": "retrieve",
+    "updated": [
+      "documents"
+    ]
+  },
+  {
+    "node": "grade_documents",
+    "updated": [
+      "documents"
+    ]
+  },
+  {
+    "node": "generate",
+    "updated": [
+      "answer",
+      "citations"
+    ],
+    "answer": "Diversification spreads risk across many investments [1]."
+  },
+  {
+    "node": "critic",
+    "updated": [
+      "critique",
+      "grounded",
+      "history",
+      "relevant"
+    ]
+  }
+]

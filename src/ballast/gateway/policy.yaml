@@ -1,0 +1,26 @@
+# Declarative guardrail policy. A non-engineer can add or edit rules here without touching code.
+# Rule types:
+#   require_citation : a substantive (non-refusal) answer must carry at least one citation
+#   forbid_patterns  : block the answer if any regex (case-insensitive) matches
+rules:
+  - name: always-cite-sources
+    type: require_citation
+    message: answers must cite their sources
+
+  - name: no-personalized-financial-advice
+    type: forbid_patterns
+    message: this assistant gives general education, not personalized financial advice
+    patterns:
+      - "you should (buy|sell|short|invest in)"
+      - "I (recommend|suggest) (buying|selling|investing)"
+      - "(buy|sell) .* (right now|today|immediately)"
+      - "put (all|most) of your money"
+
+  - name: no-medical-or-legal-advice
+    type: forbid_patterns
+    message: this assistant does not give medical or legal advice
+    patterns:
+      - "medical advice"
+      - "legal advice"
+      - "you should (sue|see a doctor)"
+      - "diagnos(e|is|ed)"
