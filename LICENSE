@@ -19,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-The MIT license above covers the source code. The knowledge-base documents under
-corpus/ carry their own per-file provenance and license in frontmatter: most are
-U.S. federal government works in the public domain (17 U.S.C. 105), and the
-methodology notes are the repository author's own original educational content.
