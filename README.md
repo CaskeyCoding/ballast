@@ -2,7 +2,7 @@
 
 Ground, guard, and grade your LLM apps so they don't capsize into hallucination.
 
-Three composing LLM-engineering subsystems over one shared core, built as a portfolio project:
+Three composing LLM-engineering subsystems over one shared core:
 
 1. **Self-healing RAG** (`rag/`) - a LangGraph stateful graph that retrieves, grades its documents,
    generates a cited answer, critiques that answer for groundedness and relevancy, and either
@@ -19,6 +19,8 @@ The RAG knowledge base is a **public, non-sensitive** finance/investing corpus: 
 documents adapted from federal public-domain sources (SEC/investor.gov, IRS, CFPB, FDIC, Treasury,
 BLS) plus a handful of the author's own methodology notes, each with per-file provenance
 frontmatter (see `corpus/README.md`). No private data of any kind belongs in this repo.
+
+Design notes and the case study: https://caskeycoding.com/case-studies/ballast. The essay on why it says "I don't know": https://caskeycoding.com/blog/ballast-an-llm-that-says-i-dont-know.
 
 ## Architecture
 
@@ -139,3 +141,11 @@ regresses, or the newest ledger entry is stale relative to HEAD), with a committ
 
 Specs in `specs/DESIGN.md`; the build queue is `specs/BACKLOG.md`, drained one item per run by the
 local backlog loop.
+
+## License
+
+MIT for the source code (see `LICENSE`). The knowledge-base documents under
+`corpus/` carry their own per-file provenance and license in frontmatter: most
+are U.S. federal government works in the public domain (17 U.S.C. 105), and
+the methodology notes are the repository author's own original educational
+content.
